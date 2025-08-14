@@ -16,4 +16,24 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         return view('posts.show', compact('post'));
     }
+    //課題3追記 投稿作成ページ表示
+    public function create() {
+        return view('posts.create');
+    }
+    //投稿データ保存
+    public function store(Request $request) {
+    // バリデーションを設定する
+        $request->validate([
+            'title' => 'required|max:20',
+            'content' => 'required|max:200'
+        ]);
+        // フォームの入力内容をもとに、テーブルにデータを追加する
+        $post = new Post();
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->save();
+        
+        // リダイレクトさせる
+        return redirect('/posts');
+    }
 }
